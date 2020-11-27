@@ -1,0 +1,62 @@
+﻿body {
+    background-color: #f0f2f5;
+}
+
+.blue {
+    color: #176fe5;
+}
+
+.black {
+    color: #1c1e21;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.facebook {
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.p_under_fb {
+    font-size: 25px;
+}
+
+.container {
+    margin-top: 10%;
+}
+
+.panel {
+    width: 100%;
+    height: 362px;
+    /*	border: 1px solid black;
+*/ border-radius: 5px;
+    background-color: white;
+    box-shadow: 2px 2px 2px #ddd;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 25px;
+}
+    .panel > form > div > p {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+.btn1 {
+    width: 100%;
+    background-color: #f01f25;
+}
+
+.div_btn2 {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.mdpo {
+    margin-top: 30px;
+}
+
+.create {
+    margin-top: 19px;
+}

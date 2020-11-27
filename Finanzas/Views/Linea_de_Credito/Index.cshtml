@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Finanzas.Models.Linea_de_Credito>
+
+@{
+    ViewData["Title"] = "Lineas de Creditos";
+}
+
+<h1>Lista de Creditos</h1>
+
+<p>
+    <a asp-action="Create">Crear Linea de Credito</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nombre del Credito
+            </th>
+            <th>
+                Tasa (%)
+            </th>
+            <th>
+                Tipo de Interes
+            </th>
+            <th>
+                Periodos de Pago
+            </th>
+            <th>
+                Capitalizacion
+            </th>
+            <th>
+                Linea de Credito
+            </th>
+            <th>
+                Tipo de Año
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombrePaquete)
+            </td>
+            <td>
+                @item.Interes%
+            </td>
+            <td>
+                @if (item.Tasa == 0)
+                {
+                    @("Nominal")
+                }
+                else if(item.Tasa==1)
+                {
+                    @("Simple")
+                }
+                else{
+                    @("Efectiva")
+                }
+            </td>
+            <td>
+                @if (item.Periodo == 0)
+                {
+                    @("Mensual")
+                }
+                else
+                {
+                    @("Bimestral")
+                }
+              
+            </td>
+            <td>
+                @if (item.Capitalizacion == 0)
+                {
+                    @("Diaria")
+                }
+                else if (item.Capitalizacion == 1)
+                {
+                    @("Quincenal")
+                }
+                else
+                {
+                    @("Mensual")
+                }
+            </td>
+            <td>
+                S/@item.Credito.00
+            </td>
+            <td>
+                @if (item.Year == 0)
+                {
+                    @("Ordinario")
+                }
+                else
+                {
+                    @("Biciesto")
+                }
+               
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

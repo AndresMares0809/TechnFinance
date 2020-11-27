@@ -1,0 +1,75 @@
+﻿@using Finanzas.Models.ViewModels
+@model LoginViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/css/bootstrap4/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap4/bootstrap.min.js">
+    <link rel="stylesheet" href="~/css/login.css">
+
+    <title>TechFinance | Login</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="blue facebook"><img width="100" src="~/images/logo.png" /></p>
+                <p class="black p_under_fb">Bienvenido al Panel del TechFinance, ingresa con tu RUC y Contraseña como usuario frecuente.</p>
+
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel" style="height:auto !important">
+                    @using (Html.BeginForm("login", "identity", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @if (ViewBag.Error != null)
+                        {
+                            <p class="text-danger">@ViewBag.Error</p>
+                        }
+                        <div>
+                            <p>
+                                RUC de la Empresa
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.RUC, new { @class = "form-control", placeholder = "Ingrese su numero de RUC" })
+                            @Html.ValidationMessageFor(m => m.RUC, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <p>Contraseña</p>
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", type = "password", placeholder = "Ingrese su Contraseña" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+                        <input type="submit" class="btn btn-danger btn-lg btn1" value="Ingresar" style="font-weight:bold"></input>
+                        <p class="text-center mdpo blue">
+                            <a href="@Url.Action("Register","identity")">
+                                ¿Nuevo por aquí? Registrese
+                            </a>
+                        </p>
+                        <hr>
+
+                    }
+                </div>
+                <p class="create"><small><span class="bold">TechFinance: </span>Recuerde que este sitio web es unicamente para invitados de la organización para dar mantenimiento de la pagina web.</small></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+﻿@model IEnumerable<Finanzas.Models.Movimiento>
+
+@{
+    ViewData["Title"] = "Movimientos de " + ViewBag.Cliente.Firstname + " " + ViewBag.Cliente.Lastname;
+    decimal montoapagar = 0;
+    decimal montoinicial = 0;
+    decimal montoAcumulado = 0;
+    decimal interes = 0;
+    int dias = 0;
+    decimal k = 0;
+}
+
+<h1>Movimientos de @ViewBag.Cliente.Firstname</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tipo de Movimiento
+            </th>
+            <th>
+                Monto Inicial
+            </th>
+            <th>
+                Intereses Acumulado
+            </th>
+            <th>
+                Monto Entrante
+            </th>
+
+            <th>
+                Monto a Pagar
+            </th>
+            <th>
+                Fecha del Movimiento
+            </th>
+            <th>
+                Dias Transcurridos
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int contador = 0;
+        }
+        @foreach (var item in Model)
+        {
+            DateTime fecha = DateTime.Now.Date;
+            contador++;
+            interes = 0;
+            if (contador == 1)
+            {
+                fecha = item.Fecha.Date;
+            }
+            else
+            {
+                var t2 = Model.ToList();
+                fecha = t2[contador-2].Fecha.Date;
+            }
+
+            Cliente e = ViewBag.Cliente;
+            decimal i = e.Credito.Interes / 100;
+            decimal t = 0;
+            if (e.Credito.Tasa == 1)
+            {
+                {
+                    if (e.Credito.Year == 0) //ORDINARIO
+                    {
+                        t = Decimal.Divide((Int32)(item.Fecha.Date-fecha).TotalDays, 360);
+                    }
+                    else //BICIESTO
+                    {
+                        t = Decimal.Divide((Int32)(item.Fecha.Date-fecha).TotalDays, 365);
+                    }
+                    if (e.Credito.Periodo == 0)
+                    {
+                        interes = Decimal.Round(item.Monto * ((i * 12 * t)), 2);
+                    }
+                    else
+                    {
+                        interes = Decimal.Round(item.Monto * ((i * 6 * t)), 2);
+
+                    }
+                }
+            }
+            else if (e.Credito.Tasa == 0)
+            {
+                {
+                    if (e.Credito.Periodo == 0) //MENSUAL
+                    {
+                        dias = (Int32)(item.Fecha.Date-fecha).TotalDays;
+
+                        switch (e.Credito.Capitalizacion)
+                        {
+                            case 0:
+                                interes = Decimal.Round((decimal)(montoAcumulado * (decimal)(Math.Pow((double)(1 + (i / 30)), dias) - 1)), 2);
+                                break;
+
+                            case 1:
+                                interes = Decimal.Round((decimal)(montoAcumulado * (decimal)(Math.Pow((double)(1 + ((i/15 )/ 30)), dias) - 1)), 2);
+                                break;
+
+                            default:
+                                interes = Decimal.Round((decimal)(montoAcumulado * (decimal)(Math.Pow((double)(1 + ((i / 30) / 30)), dias) - 1)), 2);
+
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        dias = (Int32)(item.Fecha.Date-fecha).TotalDays;
+                        switch (e.Credito.Capitalizacion)
+                        {
+                            case 0:
+                                interes = Decimal.Round((decimal)(montoAcumulado * (decimal)(Math.Pow((double)(1 + (i / 60)), dias) - 1) ), 2);
+                                break;
+
+                            case 1:
+                                interes = Decimal.Round((decimal)(montoAcumulado * (decimal)(Math.Pow((double)(1 + ((i / 15) / 60)), dias) - 1) ), 2);
+                                break;
+
+                            default:
+                                interes = Decimal.Round((decimal)(montoAcumulado * (decimal)(Math.Pow((double)(1 + ((i / 30) / 60)), dias) - 1) ), 2);
+
+                                break;
+                        }
+                    }
+                }
+           
+
+            }
+            else
+            {
+                    dias = (Int32)(item.Fecha.Date-fecha).TotalDays;
+                    if (e.Credito.Periodo == 0) //MENSUAL
+                    {
+                        k = Decimal.Divide(dias, 30);
+                        interes = Decimal.Round(montoAcumulado * (decimal)((Math.Pow((double)(1 + i), (double)k)) - 1) , 2);
+                    }
+                    else
+                    {
+                        k = Decimal.Divide(dias, 60);
+                        interes = Decimal.Round(montoAcumulado * (decimal)((Math.Pow((double)(1 + i), (double)k)) - 1), 2);
+                    }
+            }
+        
+
+        <tr>
+            <td>
+                @if (item.Type == 0)
+                {
+                    @("Pago")
+                }
+                else
+                {
+                    @("Compra")
+                }
+            </td>
+            <td>
+                @montoAcumulado
+            </td>
+            @if (item.Type == 0) //PAGO
+            {
+                montoAcumulado = montoAcumulado - item.Monto;
+            }
+            @if (item.Type == 1)
+            {
+                montoAcumulado = montoAcumulado + item.Monto;
+            }
+        <td>
+                @("S/"+interes.ToString())
+           
+        </td>
+        <td>
+            @if (item.Type == 1)
+            {
+                @("S/"+ item.Monto.ToString())
+            }
+            else
+            {
+                @("S/-"+ item.Monto.ToString())
+            }
+        </td>
+
+            <td>
+
+                S/@(montoAcumulado+interes)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td>
+                @((Int32)(item.Fecha.Date - fecha).TotalDays)
+            </td>
+        </tr>
+            montoAcumulado=montoAcumulado + interes;
+
+        }
+    </tbody>
+ 
+</table>
+
+<p class="text-success">
+    Saldo del Credito Disponible: S/@(ViewBag.Cliente.Credito.Credito-Model.Sum(d=>d.Monto))
+</p>

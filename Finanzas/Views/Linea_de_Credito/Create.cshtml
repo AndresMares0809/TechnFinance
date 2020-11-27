@@ -1,0 +1,61 @@
+﻿@model Finanzas.Models.Linea_de_Credito
+
+@{
+    ViewData["Title"] = "Crear Linea de Credito";
+}
+
+<h1>Crear</h1>
+
+<h4>Nueva Linea de Credito</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Nombre del Paquete</label>
+                <input asp-for="NombrePaquete" class="form-control" />
+                <span asp-validation-for="NombrePaquete" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Tasa de Interes (%)</label>
+                <input asp-for="Interes" class="form-control" />
+                <span asp-validation-for="Interes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Tipo de Interes</label>
+                <select asp-for="Tasa" class="form-control" asp-items="ViewBag.TiposTasa"></select>
+                <span asp-validation-for="Tasa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Periodo/Concurrencia de Pago</label>
+                <select asp-for="Periodo" class="form-control" asp-items="ViewBag.TiposPeriodo"></select>
+                <span asp-validation-for="Periodo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Capitalizacion</label>
+                <select asp-for="Capitalizacion" class="form-control" asp-items="ViewBag.Capitalizacion"></select>
+                <span asp-validation-for="Capitalizacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Linea Maximo de Credito</label>
+                <input asp-for="Credito" class="form-control" />
+                <span asp-validation-for="Credito" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Tipo de Año</label>
+                <select asp-for="Year" class="form-control" asp-items="ViewBag.TiposAño"></select>
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
